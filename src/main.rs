@@ -1,5 +1,5 @@
-mod matrix;
-use matrix::Matrix;
+mod lib;
+use lib::Matrix;
 
 fn main() {
     let mut matrix = Matrix::new(vec![vec![1, 0, 1], vec![0, 1, 1], vec![1, 0, 1]]);

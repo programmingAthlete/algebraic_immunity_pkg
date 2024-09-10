@@ -1,20 +1,20 @@
+use pyo3::prelude::*;
+
+#[pyclass]
 #[derive(Debug, Clone)]
 pub struct Matrix {
-    pub elements: Vec<Vec<u8>>, // Representing the matrix as a 2D vector of u8 values (0 or 1 in GF(2))
+    pub elements: Vec<Vec<u8>>,
 }
 
 impl Matrix {
-    // Constructor for the matrix
     pub fn new(elements: Vec<Vec<u8>>) -> Self {
         Matrix { elements }
     }
 
-    // Get the number of rows in the matrix
     fn nrows(&self) -> usize {
         self.elements.len()
     }
 
-    // Get the number of columns in the matrix
     fn ncols(&self) -> usize {
         if !self.elements.is_empty() {
             self.elements[0].len()
@@ -23,39 +23,32 @@ impl Matrix {
         }
     }
 
-    // Copy the matrix
     fn copy(&self) -> Self {
-        self.clone() // Since the Matrix has Clone, this will perform a deep copy
+        self.clone()
     }
 
-    // Get an element in the matrix
     fn get(&self, row: usize, col: usize) -> u8 {
         self.elements[row][col]
     }
 
-    // Find the pivot (leading non-zero element) in a row
     fn get_pivot(row: &Vec<u8>) -> Option<usize> {
         row.iter().position(|&x| x == 1)
     }
 
-    // Perform row addition in GF(2) (which is XOR)
     fn add_rows(&mut self, target: usize, source: usize) {
         for i in 0..self.ncols() {
-            self.elements[target][i] ^= self.elements[source][i]; // XOR for GF(2) addition
+            self.elements[target][i] ^= self.elements[source][i];
         }
     }
 
-    // Perform row swap
     fn swap_rows(&mut self, row1: usize, row2: usize) {
         self.elements.swap(row1, row2);
     }
 
-    // Check if a row is zero
     fn is_zero_row(&self, row: usize) -> bool {
         self.elements[row].iter().all(|&x| x == 0)
     }
 
-    // The echf_2 method (similar to the Python method)
     pub fn echf_2(&mut self) -> (Self, Vec<(usize, usize)>) {
         let mut m_copy = self.copy();
         let mut last_row = m_copy.elements[m_copy.nrows() - 1].clone();
@@ -111,4 +104,10 @@ impl Matrix {
 
         (m_copy, operations)
     }
+}
+
+#[pymodule]
+fn algebraic_immunity_pkg(py: Python, m: &PyModule) -> PyResult<()> {
+    m.add_class::<Matrix>()?;
+    Ok(())
 }
