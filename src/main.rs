@@ -2,6 +2,16 @@ mod vector;
 
 use vector::GF2Vector;
 
+struct GF2Matrix {
+    elements: Vec<GF2Vector>,
+}
+
+impl GF2Matrix {
+    fn new(elements: Vec<GF2Vector>) -> Self {
+        GF2Matrix { elements }
+    }
+}
+
 fn main() {
     let v1 = GF2Vector::new(vec![1, 0, 1]);
     let v2 = GF2Vector::new(vec![0, 1, 0]);
@@ -10,6 +20,10 @@ fn main() {
     let v3 = vector_sum(&v1, &v2);
     println!("{:?}", v3);
     print!("{}", v1);
+
+    let ops = [(0, 1), (1, 1)];
+    let m = GF2Matrix::new(vec![v1, v2]);
+    print!("{}", m.elements[0]);
 }
 
 fn vector_sum(v1: &GF2Vector, v2: &GF2Vector) -> GF2Vector {
