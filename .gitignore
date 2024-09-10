@@ -1,1 +1,4 @@
 /target
+
+.python-version
+Cargo.lock

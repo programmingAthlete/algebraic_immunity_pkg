@@ -1,3 +1,7 @@
+use pyo3::prelude::*;
+use pyo3::wrap_pyfunction;
+
+#[pyclass]
 #[derive(Debug, Clone)]
 pub struct Matrix {
     pub elements: Vec<Vec<u8>>, // Representing the matrix as a 2D vector of u8 values (0 or 1 in GF(2))
@@ -111,4 +115,10 @@ impl Matrix {
 
         (m_copy, operations)
     }
+}
+
+#[pymodule]
+fn algebraic_immunity_pkg(py: Python, m: &PyModule) -> PyResult<()> {
+    m.add_class::<Matrix>()?;
+    Ok(())
 }
